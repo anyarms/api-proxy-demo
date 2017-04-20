@@ -1,62 +1,77 @@
-swagger: '2.0'
-schemes:
-  - http
-host: xkcd.com
-basePath: /
+---
+swagger: "2.0"
 info:
-  description: 'Webcomic of romance, sarcasm, math, and language.'
-  title: XKCD v1
-  version: 1.0.0
-externalDocs:
-  url: 'https://xkcd.com/json.html'
-securityDefinitions: {}
+  version: "1.0.0"
+  title: "XKCD v1"
+host: "xxxxxxxxxx.execute-api.us-west-2.amazonaws.com"
+basePath: "/demo"
+schemes:
+- "https"
 paths:
   /info.0.json:
     get:
-      description: |
-        Fetch current comic and metadata.
+      produces:
+      - "application/json"
       responses:
-        '200':
-          description: OK
+        200:
+          description: "200 response"
           schema:
-            $ref: '#/definitions/comic'
-  '/{comicId}/info.0.json':
+            $ref: "#/definitions/comic"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+        uri: "https://xkcd.com/info.0.json"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "GET"
+        type: "http"
+  /{comicId}/info.0.json:
     get:
-      description: |
-        Fetch comics and metadata  by comic id.
+      produces:
+      - "application/json"
       parameters:
-        - in: path
-          name: comicId
-          required: true
-          type: number
+      - name: "comicId"
+        in: "path"
+        required: true
+        type: "string"
       responses:
-        '200':
-          description: OK
+        200:
+          description: "200 response"
           schema:
-            $ref: '#/definitions/comic'
+            $ref: "#/definitions/comic"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+        requestParameters:
+          integration.request.path.comicId: "method.request.path.comicId"
+        uri: "https://xkcd.com/{comicId}/info.0.json"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "GET"
+        type: "http"
 definitions:
   comic:
+    type: "object"
     properties:
       alt:
-        type: string
+        type: "string"
       day:
-        type: string
+        type: "string"
       img:
-        type: string
+        type: "string"
       link:
-        type: string
+        type: "string"
       month:
-        type: string
+        type: "string"
       news:
-        type: string
+        type: "string"
       num:
-        type: number
+        type: "number"
       safe_title:
-        type: string
+        type: "string"
       title:
-        type: string
+        type: "string"
       transcript:
-        type: string
+        type: "string"
       year:
-        type: string
-    type: object
+        type: "string"
