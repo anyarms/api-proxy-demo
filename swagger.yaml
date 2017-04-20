@@ -1,14 +1,14 @@
 ---
 swagger: "2.0"
 info:
-  version: "1.0.0"
-  title: "XKCD v1"
+  version: "2.0.0"
+  title: "XKCD v2"
 host: "xxxxxxxxxx.execute-api.us-west-2.amazonaws.com"
 basePath: "/demo"
 schemes:
 - "https"
 paths:
-  /info.0.json:
+  /latest:
     get:
       produces:
       - "application/json"
@@ -25,7 +25,7 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: "GET"
         type: "http"
-  /{comicId}/info.0.json:
+  /{comicId}:
     get:
       produces:
       - "application/json"
