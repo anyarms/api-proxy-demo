@@ -21,12 +21,15 @@ paths:
         responses:
           default:
             statusCode: "200"
-        uri: "https://xkcd.com/info.0.json"
+        uri: "arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:xxxxxxxxxx:function:xkcdLatestComic/invocations"
         passthroughBehavior: "when_no_match"
-        httpMethod: "GET"
-        type: "http"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
   /{comicId}:
     get:
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
@@ -39,16 +42,29 @@ paths:
           description: "200 response"
           schema:
             $ref: "#/definitions/comic"
+          headers:
+            Content-Type:
+              type: "string"
+        404:
+          description: "404 response"
       x-amazon-apigateway-integration:
         responses:
           default:
             statusCode: "200"
-        requestParameters:
-          integration.request.path.comicId: "method.request.path.comicId"
-        uri: "https://xkcd.com/{comicId}/info.0.json"
-        passthroughBehavior: "when_no_match"
-        httpMethod: "GET"
-        type: "http"
+            responseParameters:
+              method.response.header.Content-Type: "'application/json'"
+            responseTemplates:
+              application/json: "$util.parseJson($input.json('$.body'));"
+          .*Error from xkcd.com.*:
+            statusCode: "404"
+        requestTemplates:
+          application/json: "{\n    \"comicId\": \"$input.params().path.comicId\"\n\
+            }"
+        uri: "arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:xxxxxxxxxx:function:xkcdSpecificComic/invocations"
+        passthroughBehavior: "never"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws"
 definitions:
   comic:
     type: "object"
