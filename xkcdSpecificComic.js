@@ -15,6 +15,10 @@ exports.handler = (event, context, callback) => {
             str += chunk;
           });
           res.on('end', function() {
+            var obj = JSON.parse(str);
+            obj.next_link = (obj.num === 1826 ? "/" : "/" + (obj.num + 1).toString() );
+            obj.prev_link = (obj.num === 1 ? "/" : "/" + (obj.num - 1).toString() );
+            str = JSON.stringify(obj);
             sendResult(res.statusCode, res.statusCode === 200 ? str : res.statusMessage);
           });
           res.on('error', function(e) {
