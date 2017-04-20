@@ -1,8 +1,8 @@
 ---
 swagger: "2.0"
 info:
-  version: "2.0.0"
-  title: "XKCD v2"
+  version: "3.0.0"
+  title: "XKCD v3"
 host: "xxxxxxxxxx.execute-api.us-west-2.amazonaws.com"
 basePath: "/demo"
 schemes:
