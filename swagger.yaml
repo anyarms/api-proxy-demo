@@ -1,8 +1,8 @@
 ---
 swagger: "2.0"
 info:
-  version: "3.0.0"
-  title: "XKCD v3"
+  version: "4.0.0"
+  title: "XKCD v4"
 host: "xxxxxxxxxx.execute-api.us-west-2.amazonaws.com"
 basePath: "/demo"
 schemes:
@@ -65,6 +65,24 @@ paths:
         httpMethod: "POST"
         contentHandling: "CONVERT_TO_TEXT"
         type: "aws"
+  /first:
+    get:
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/comic"
+  /random:
+    get:
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/comic"
 definitions:
   comic:
     type: "object"
@@ -76,6 +94,10 @@ definitions:
       img:
         type: "string"
       link:
+        type: "string"
+      prev_link:
+        type: "string"
+      next_link:
         type: "string"
       month:
         type: "string"
